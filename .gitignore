@@ -1,0 +1,8 @@
+.DS_Store
+exec/bin/**
+exec/obj/**
+lib/bin/**
+lib/obj/**
+tests/bin/**
+tests/obj/**
+packages
