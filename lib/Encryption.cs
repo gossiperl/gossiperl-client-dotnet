@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 
 namespace Gossiperl.Client.Encryption
 {
+
 	public class Aes256
 	{
 		private byte[] key;

@@ -6,3 +6,5 @@ lib/obj/**
 tests/bin/**
 tests/obj/**
 packages
+.nuget
+TestResult.xml

@@ -1,18 +1,29 @@
 ﻿using System;
+using Gossiperl.Client;
 using Gossiperl.Client.Encryption;
 using Thrift.Protocol;
+using System.Reflection;
+using System.IO;
 
 namespace gossiperlclientdotnetexec
 {
 	class MainClass
 	{
+
 		public static void Main (string[] args)
 		{
-			string data = "This is my data to encrypt. Heh.";
-			Aes256 aes = new Aes256 ("v3JElaRswYgxOt4b");
-			byte[] encrypted = aes.Encrypt (System.Text.Encoding.UTF8.GetBytes(data));
-			byte[] decrypted = aes.Decrypt (encrypted);
-			Console.WriteLine ( System.Text.Encoding.UTF8.GetString( decrypted ) );
+			log4net.ILog Log = log4net.LogManager.GetLogger( typeof( MainClass ) );
+			Log.Info ("Doing something!");
+			OverlayConfiguration config = new OverlayConfiguration () {
+				ClientName = "test-dotnet-client",
+				ClientPort = 54321,
+				ClientSecret = "dotnet-client-secret",
+				OverlayName = "gossiperl_overlay_remote",
+				OverlayPort = 6666,
+				SymmetricKey = "v3JElaRswYgxOt4b"
+			};
+			OverlayWorker worker = new OverlayWorker (config);
+			worker.Start ();
 		}
 	}
 }
