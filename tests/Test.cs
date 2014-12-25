@@ -1,14 +1,15 @@
 ﻿using NUnit.Framework;
 using System;
 
-namespace tests
+namespace Gossiperl.Client.Tests
 {
-	[TestFixture ()]
+	[TestFixture]
 	public class Test
 	{
-		[Test ()]
+		[Test]
 		public void TestCase ()
 		{
+			Assert.That (null, Is.Null);
 		}
 	}
 }

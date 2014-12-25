@@ -35,9 +35,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Test.cs" />
+    <Compile Include="EmptyClass.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\lib\gossiperl-client-dotnet-lib.csproj">
+      <Project>{E2E2F4B9-2013-4A2F-8B2C-5E165A21AB92}</Project>
+      <Name>gossiperl-client-dotnet-lib</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

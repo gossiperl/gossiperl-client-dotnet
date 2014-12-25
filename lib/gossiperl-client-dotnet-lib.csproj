@@ -29,14 +29,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="BouncyCastle.Crypto">
-      <HintPath>packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <HintPath>packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="Thrift">
-      <HintPath>packages\Thrift.0.9.1.3\lib\net35\Thrift.dll</HintPath>
+      <HintPath>..\packages\Thrift.0.9.1.3\lib\net35\Thrift.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -56,12 +50,14 @@
     <Compile Include="Thrift\DigestSubscriptions.cs" />
     <Compile Include="Thrift\DigestUnsubscribe.cs" />
     <Compile Include="Thrift\DigestUnsubscribeAck.cs" />
+    <Compile Include="Serialization\Serializer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="Thrift\" />
+    <Folder Include="Serialization\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Thrift\" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
