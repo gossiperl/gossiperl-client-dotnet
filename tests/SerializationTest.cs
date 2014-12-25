@@ -11,8 +11,7 @@ namespace Gossiperl.Client.Tests
 		private string digestType;
 		private System.Collections.Generic.List<CustomDigestField> digestInfo;
 
-		[SetUp]
-		public void SetUp()
+		[SetUp] public void SetUp()
 		{
 			serializer = new Serializer ();
 			digestType = "someDigestType";
@@ -21,8 +20,7 @@ namespace Gossiperl.Client.Tests
 			digestInfo.Add (new CustomDigestField ("some_other_property", 1234, "i32", (short)2));
 		}
 
-		[Test]
-		public void TestSerializeDeserialize ()
+		[Test] public void TestSerializeDeserialize ()
 		{
 			byte[] envelope = serializer.SerializeArbitrary( digestType, digestInfo );
 			DeserializeResult result = serializer.DeserializeArbitrary( digestType, envelope, digestInfo );
