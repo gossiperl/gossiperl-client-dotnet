@@ -1,6 +1,5 @@
 ﻿using System;
-using Gossiperl.Client.Serialization;
-using Gossiperl.Client.Thrift;
+using Gossiperl.Client.Encryption;
 using Thrift.Protocol;
 
 namespace gossiperlclientdotnetexec
@@ -9,7 +8,11 @@ namespace gossiperlclientdotnetexec
 	{
 		public static void Main (string[] args)
 		{
-			Console.WriteLine ( Gossiperl.Client.Util.GetTimestamp() );
+			string data = "This is my data to encrypt. Heh.";
+			Aes256 aes = new Aes256 ("v3JElaRswYgxOt4b");
+			byte[] encrypted = aes.Encrypt (System.Text.Encoding.UTF8.GetBytes(data));
+			byte[] decrypted = aes.Decrypt (encrypted);
+			Console.WriteLine ( System.Text.Encoding.UTF8.GetString( decrypted ) );
 		}
 	}
 }

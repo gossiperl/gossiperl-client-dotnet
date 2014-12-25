@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using Gossiperl.Client.Serialization;
+using Gossiperl.Client.Encryption;
 using Gossiperl.Client.Thrift;
 using Thrift.Protocol;
 
@@ -15,8 +16,7 @@ namespace Gossiperl.Client.Tests
 		protected Digest testDigest;
 		protected string encKey;
 
-		[SetUp]
-		public void Setup()
+		[SetUp] public void Setup()
 		{
 			this.serializer = new Serializer ();
 			this.testDigest = new Digest ();
@@ -28,11 +28,25 @@ namespace Gossiperl.Client.Tests
 			this.encKey = "v3JElaRswYgxOt4b";
 		}
 
-		[Test]
-		public void TestSerializeDeserialize()
+		[Test] public void TestSerializeDeserialize()
 		{
 			byte[] envelope = serializer.Serialize (testDigest);
 			DeserializeResult result = serializer.Deserialize (envelope);
+			Assert.IsTrue (result is DeserializeResultOK);
+			DeserializeResultOK resultOk = (DeserializeResultOK)result;
+			TBase deserializedResult = resultOk.Digest;
+			Assert.IsTrue (deserializedResult is Digest);
+			Digest deserializedDigest = (Digest)deserializedResult;
+			Assert.AreEqual (deserializedDigest.Name, this.testDigest.Name);
+		}
+
+		[Test] public void TestSerializeDeserializeWithEncryption()
+		{
+			Aes256 aes = new Aes256 (encKey);
+			byte[] envelope = serializer.Serialize (testDigest);
+			byte[] encryptedEnvelope = aes.Encrypt (envelope);
+			byte[] decryptedEnvelope = aes.Decrypt (encryptedEnvelope);
+			DeserializeResult result = serializer.Deserialize (decryptedEnvelope);
 			Assert.IsTrue (result is DeserializeResultOK);
 			DeserializeResultOK resultOk = (DeserializeResultOK)result;
 			TBase deserializedResult = resultOk.Digest;
