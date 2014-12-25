@@ -1,5 +1,7 @@
 ﻿using System;
-using Gossiperl.Client;
+using Gossiperl.Client.Serialization;
+using Gossiperl.Client.Thrift;
+using Thrift.Protocol;
 
 namespace gossiperlclientdotnetexec
 {
@@ -7,7 +9,7 @@ namespace gossiperlclientdotnetexec
 	{
 		public static void Main (string[] args)
 		{
-			Supervisor s = new Supervisor ();
+			Console.WriteLine ( Gossiperl.Client.Util.GetTimestamp() );
 		}
 	}
 }
