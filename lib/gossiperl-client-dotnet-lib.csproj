@@ -50,12 +50,13 @@
     <Compile Include="Thrift\DigestSubscriptions.cs" />
     <Compile Include="Thrift\DigestUnsubscribe.cs" />
     <Compile Include="Thrift\DigestUnsubscribeAck.cs" />
-    <Compile Include="Serialization\Serializer.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="Util.cs" />
+    <Compile Include="Serialization.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Thrift\" />
-    <Folder Include="Serialization\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
