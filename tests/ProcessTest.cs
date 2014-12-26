@@ -40,6 +40,7 @@ namespace Gossiperl.Client.Tests
 			Assert.AreEqual (supervisor.Unsubscribe (configuration.OverlayName, subscriptions), new List<string>());
 			Thread.Sleep (3000);
 			supervisor.Disconnect (configuration.OverlayName);
+			Thread.Sleep (1500);
 			Assert.AreEqual (supervisor.NumberOfConnections, 0);
 		}
 

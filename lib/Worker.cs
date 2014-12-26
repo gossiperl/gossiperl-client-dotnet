@@ -149,7 +149,10 @@ namespace Gossiperl.Client
 
 		public void Stop()
 		{
-			OnStopped ();
+			if (messaging.DigestExit ()) {
+				working = false;
+				OnStopped ();
+			}
 		}
 
 		private void OverlayWorkerTask()

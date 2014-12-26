@@ -160,6 +160,7 @@ namespace Gossiperl.Client
 		public void Disconnect(string overlayName)
 		{
 			if (IsConnection (overlayName)) {
+				connections [overlayName].Stop ();
 			} else {
 				throw new Gossiperl.Client.Exceptions.GossiperlClientException ("[supervisor] No overlay connection: " + overlayName);
 			}
@@ -222,6 +223,9 @@ namespace Gossiperl.Client
 
 		public void Stop()
 		{
+			foreach (OverlayWorker worker in connections.Values) {
+				worker.Stop ();
+			}
 		}
 
 		public int NumberOfConnections {

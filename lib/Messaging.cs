@@ -205,13 +205,14 @@ namespace Gossiperl.Client
 			Send (ack);
 		}
 
-		public void DigestExit()
+		public bool DigestExit()
 		{
 			DigestExit digest = new DigestExit ();
 			digest.Name = worker.Configuration.ClientName;
 			digest.Heartbeat = Util.GetTimestamp ();
 			digest.Secret = worker.Configuration.ClientSecret;
 			Send (digest);
+			return true;
 		}
 
 		public void DigestSubscribe(List<string> events)
@@ -384,11 +385,12 @@ namespace Gossiperl.Client
 					}
 
 				} else {
-					throw new NotImplementedException ("Verify this is stop.");
+					udpSock.Dispose ();
+					Log.Info("[" + worker.Configuration.ClientName + "] Worker is stopping. Stopping transport.");
 				}
 
-			} catch (ObjectDisposedException) {
-				throw new NotImplementedException ("Needs to publish a message to the incoming queue - this is an error");
+			} catch (ObjectDisposedException ex) {
+				OnData ( new DeserializeResultError(new Gossiperl.Client.Exceptions.GossiperlClientException("There was a problem while receiving the data.", ex)) );
 			}
 		}
 
