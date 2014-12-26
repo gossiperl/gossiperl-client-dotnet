@@ -3,7 +3,7 @@
     git clone ...
     cd gossiperl-client-dotnet/
 
-    apt-get install -y install mono-complete
+    apt-get install -y install mono-complete nunit
     mozroots --import --sync
     cd .nuget/
     wget https://nuget.org/nuget.exe

@@ -270,6 +270,10 @@ namespace Gossiperl.Client.Serialization
 	{
 	}
 
+	public class DeserializeResultKillPill : DeserializeResult
+	{
+	}
+
 	public class DeserializeResultOK : DeserializeResult
 	{
 		private string digestType;
