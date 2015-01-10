@@ -1,4 +1,5 @@
 .DS_Store
+*.userprefs
 exec/bin/**
 exec/obj/**
 lib/bin/**
