@@ -380,15 +380,18 @@ namespace Gossiperl.Client.Serialization
 		private string type;
 		private short fieldOrder;
 
-		public CustomDigestField(string fieldName, object value, string type, short fieldOrder)
+		public CustomDigestField(string fieldName, object value, string type, int fieldOrder)
 		{
 			if (!Serializer.IsSerializableType (type)) {
 				throw new Gossiperl.Client.Exceptions.GossiperlUnsupportedSerializableTypeException (type);
 			}
+			if (fieldOrder < 0 || fieldOrder > short.MaxValue) {
+				throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Field ID must be at least 0 and no greater than " + short.MaxValue + ".");
+			}
 			this.fieldName = fieldName;
 			this.value = value;
 			this.type = type;
-			this.fieldOrder = fieldOrder;
+			this.fieldOrder = (short)fieldOrder;
 		}
 
 		public string FieldName {
