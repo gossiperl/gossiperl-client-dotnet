@@ -10,7 +10,6 @@ namespace Gossiperl.Client.Serialization
 
 		public Serializer()
 		{
-			EnsureSerializableTypes ();
 			this.Types.Add (Serializer.DIGEST_ERROR, "Gossiperl.Client.Thrift.DigestError");
 			this.Types.Add (Serializer.DIGEST_FORWARDED_ACK, "Gossiperl.Client.Thrift.DigestForwardedAck");
 			this.Types.Add (Serializer.DIGEST_ENVELOPE, "Gossiperl.Client.Thrift.DigestEnvelope");
@@ -33,45 +32,44 @@ namespace Gossiperl.Client.Serialization
 			protocol.WriteStructBegin (new TStruct (digestType));
 			foreach (CustomDigestField field in digestData)
 			{
-				TType fieldType = SerializableTypes [field.Type];
-				protocol.WriteFieldBegin (new TField (field.FieldName, fieldType, field.FieldOrder));
-				if (fieldType == TType.Bool) {
+				protocol.WriteFieldBegin (new TField (field.FieldName, field.Type, field.FieldOrder));
+				if (field.Type == TType.Bool) {
 					try {
 						protocol.WriteBool ((bool)field.Value);
 					} catch (TProtocolException ex) {
 						throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Failed to write value " + field.Value.ToString() + " as BOOL.", ex);
 					}
-				} else if (fieldType == TType.Byte) {
+				} else if (field.Type == TType.Byte) {
 					try {
 						protocol.WriteByte((sbyte)field.Value);
 					} catch (TProtocolException ex) {
 						throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Failed to write value " + field.Value.ToString() + " as BYTE.", ex);
 					}
-				} else if (fieldType == TType.Double) {
+				} else if (field.Type == TType.Double) {
 					try {
 						protocol.WriteDouble ((double)field.Value);
 					} catch (TProtocolException ex) {
 						throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Failed to write value " + field.Value.ToString() + " as DOUBLE.", ex);
 					}
-				} else if (fieldType == TType.I16) {
+				} else if (field.Type == TType.I16) {
 					try {
 						protocol.WriteI16((short)field.Value);
 					} catch (TProtocolException ex) {
 						throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Failed to write value " + field.Value.ToString() + " as I16.", ex);
 					}
-				} else if (fieldType == TType.I32) {
+				} else if (field.Type == TType.I32) {
 					try {
 						protocol.WriteI32((int)field.Value);
 					} catch (TProtocolException ex) {
 						throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Failed to write value " + field.Value.ToString() + " as I32.", ex);
 					}
-				} else if (fieldType == TType.I64) {
+				} else if (field.Type == TType.I64) {
 					try {
 						protocol.WriteI64((long)field.Value);
 					} catch (TProtocolException ex) {
 						throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Failed to write value " + field.Value.ToString() + " as I64.", ex);
 					}
-				} else if (fieldType == TType.String) {
+				} else if (field.Type == TType.String) {
 					try {
 						protocol.WriteString (field.Value.ToString());
 					} catch (TProtocolException ex) {
@@ -118,25 +116,21 @@ namespace Gossiperl.Client.Serialization
 				TField thriftFieldInfo = protocol.ReadFieldBegin ();
 				CustomDigestField digestField = this.GetFidData ( thriftFieldInfo.ID, digestInfo );
 				if (digestField != null) {
-					if (Serializer.IsSerializableType (digestField.Type)) {
-						if (Serializer.SerializableTypes [digestField.Type] == thriftFieldInfo.Type) {
-							if (thriftFieldInfo.Type == TType.String) {
-								result.Add (digestField.FieldName, protocol.ReadString ());
-							} else if (thriftFieldInfo.Type == TType.Bool) {
-								result.Add (digestField.FieldName, protocol.ReadBool ());
-							} else if (thriftFieldInfo.Type == TType.Byte) {
-								result.Add (digestField.FieldName, protocol.ReadByte ());
-							} else if (thriftFieldInfo.Type == TType.Double) {
-								result.Add (digestField.FieldName, protocol.ReadDouble ());
-							} else if (thriftFieldInfo.Type == TType.I16) {
-								result.Add (digestField.FieldName, protocol.ReadI16 ());
-							} else if (thriftFieldInfo.Type == TType.I32) {
-								result.Add (digestField.FieldName, protocol.ReadI32 ());
-							} else if (thriftFieldInfo.Type == TType.I64) {
-								result.Add (digestField.FieldName, protocol.ReadI64 ());
-							} else {
-								TProtocolUtil.Skip (protocol, thriftFieldInfo.Type);
-							}
+					if (digestField.Type == thriftFieldInfo.Type) {
+						if (thriftFieldInfo.Type == TType.String) {
+							result.Add (digestField.FieldName, protocol.ReadString ());
+						} else if (thriftFieldInfo.Type == TType.Bool) {
+							result.Add (digestField.FieldName, protocol.ReadBool ());
+						} else if (thriftFieldInfo.Type == TType.Byte) {
+							result.Add (digestField.FieldName, protocol.ReadByte ());
+						} else if (thriftFieldInfo.Type == TType.Double) {
+							result.Add (digestField.FieldName, protocol.ReadDouble ());
+						} else if (thriftFieldInfo.Type == TType.I16) {
+							result.Add (digestField.FieldName, protocol.ReadI16 ());
+						} else if (thriftFieldInfo.Type == TType.I32) {
+							result.Add (digestField.FieldName, protocol.ReadI32 ());
+						} else if (thriftFieldInfo.Type == TType.I64) {
+							result.Add (digestField.FieldName, protocol.ReadI64 ());
 						} else {
 							TProtocolUtil.Skip (protocol, thriftFieldInfo.Type);
 						}
@@ -239,26 +233,6 @@ namespace Gossiperl.Client.Serialization
 		public static string DIGEST_EVENT { get { return "digestEvent"; } }
 
 		private System.Collections.Generic.Dictionary<string, string> Types = new System.Collections.Generic.Dictionary<string, string> ();
-		private static System.Collections.Generic.Dictionary<string, TType> SerializableTypes = new System.Collections.Generic.Dictionary<string, TType> ();
-
-		public static bool IsSerializableType(string type)
-		{
-			EnsureSerializableTypes ();
-			return SerializableTypes.ContainsKey (type);
-		}
-
-		private static void EnsureSerializableTypes()
-		{
-			if (SerializableTypes.Count == 0) {
-				SerializableTypes.Add ("string", TType.String);
-				SerializableTypes.Add ("bool", TType.Bool);
-				SerializableTypes.Add ("byte", TType.Byte);
-				SerializableTypes.Add ("double", TType.Double);
-				SerializableTypes.Add ("i16", TType.I16);
-				SerializableTypes.Add ("i32", TType.I32);
-				SerializableTypes.Add ("i64", TType.I64);
-			}
-		}
 
 		#endregion
 
@@ -377,20 +351,83 @@ namespace Gossiperl.Client.Serialization
 	{
 		private string fieldName;
 		private object value;
-		private string type;
+		private TType type;
 		private short fieldOrder;
 
-		public CustomDigestField(string fieldName, object value, string type, int fieldOrder)
+		public CustomDigestField(string fieldName, string value, int fieldOrder)
 		{
-			if (!Serializer.IsSerializableType (type)) {
-				throw new Gossiperl.Client.Exceptions.GossiperlUnsupportedSerializableTypeException (type);
-			}
 			if (fieldOrder < 0 || fieldOrder > short.MaxValue) {
 				throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Field ID must be at least 0 and no greater than " + short.MaxValue + ".");
 			}
 			this.fieldName = fieldName;
 			this.value = value;
-			this.type = type;
+			this.type = TType.String;
+			this.fieldOrder = (short)fieldOrder;
+		}
+
+		public CustomDigestField(string fieldName, bool value, int fieldOrder)
+		{
+			if (fieldOrder < 0 || fieldOrder > short.MaxValue) {
+				throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Field ID must be at least 0 and no greater than " + short.MaxValue + ".");
+			}
+			this.fieldName = fieldName;
+			this.value = value;
+			this.type = TType.Bool;
+			this.fieldOrder = (short)fieldOrder;
+		}
+
+		public CustomDigestField(string fieldName, byte value, int fieldOrder)
+		{
+			if (fieldOrder < 0 || fieldOrder > short.MaxValue) {
+				throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Field ID must be at least 0 and no greater than " + short.MaxValue + ".");
+			}
+			this.fieldName = fieldName;
+			this.value = value;
+			this.type = TType.Byte;
+			this.fieldOrder = (short)fieldOrder;
+		}
+
+		public CustomDigestField(string fieldName, double value, int fieldOrder)
+		{
+			if (fieldOrder < 0 || fieldOrder > short.MaxValue) {
+				throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Field ID must be at least 0 and no greater than " + short.MaxValue + ".");
+			}
+			this.fieldName = fieldName;
+			this.value = value;
+			this.type = TType.Double;
+			this.fieldOrder = (short)fieldOrder;
+		}
+
+		public CustomDigestField(string fieldName, short value, int fieldOrder)
+		{
+			if (fieldOrder < 0 || fieldOrder > short.MaxValue) {
+				throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Field ID must be at least 0 and no greater than " + short.MaxValue + ".");
+			}
+			this.fieldName = fieldName;
+			this.value = value;
+			this.type = TType.I16;
+			this.fieldOrder = (short)fieldOrder;
+		}
+
+		public CustomDigestField(string fieldName, int value, int fieldOrder)
+		{
+			if (fieldOrder < 0 || fieldOrder > short.MaxValue) {
+				throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Field ID must be at least 0 and no greater than " + short.MaxValue + ".");
+			}
+			this.fieldName = fieldName;
+			this.value = value;
+			this.type = TType.I32;
+			this.fieldOrder = (short)fieldOrder;
+		}
+
+		public CustomDigestField(string fieldName, long value, int fieldOrder)
+		{
+			if (fieldOrder < 0 || fieldOrder > short.MaxValue) {
+				throw new Gossiperl.Client.Exceptions.GossiperlClientException ("Field ID must be at least 0 and no greater than " + short.MaxValue + ".");
+			}
+			this.fieldName = fieldName;
+			this.value = value;
+			this.type = TType.I64;
 			this.fieldOrder = (short)fieldOrder;
 		}
 
@@ -406,7 +443,7 @@ namespace Gossiperl.Client.Serialization
 			}
 		}
 
-		public string Type {
+		public TType Type {
 			get {
 				return this.type;
 			}

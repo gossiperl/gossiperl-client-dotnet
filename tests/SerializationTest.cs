@@ -16,8 +16,8 @@ namespace Gossiperl.Client.Tests
 			serializer = new Serializer ();
 			digestType = "someDigestType";
 			digestInfo = new System.Collections.Generic.List<CustomDigestField> ();
-			digestInfo.Add (new CustomDigestField ("some_property", "this is some string to test", "string", 0));
-			digestInfo.Add (new CustomDigestField ("some_other_property", 1234, "i32", 1));
+			digestInfo.Add (new CustomDigestField ("some_property", "this is some string to test", 0));
+			digestInfo.Add (new CustomDigestField ("some_other_property", 1234, 1));
 		}
 
 		[Test] public void TestSerializeDeserialize ()
