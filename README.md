@@ -1,6 +1,6 @@
 # .NET Gossiperl client
 
-.NET [gossiperl](https://github.com/radekg/gossiperl) client library.
+.NET [gossiperl](http://gossiperl.com) client library.
 
 ## Installation
 
@@ -9,7 +9,7 @@ Download the sources and build using your tooling. This project has been tested 
     apt-get install -y install mono-complete nunit
     mozroots --import --sync
     
-    git clone https://github.com/radekg/gossiperl-client-dotnet.git
+    git clone https://github.com/gossiperl/gossiperl-client-dotnet.git
     cd gossiperl-client-dotnet/
     git tags -l
     git checkout v0.1
