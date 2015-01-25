@@ -14,19 +14,14 @@ Download the sources and build using your tooling. This project has been tested 
     git tags -l
     git checkout v0.1
     
-    mkdir -p .nuget && cd .nuget/
+    mkdir -p packages
     wget https://nuget.org/nuget.exe
-    # is there a better way of doing this?
-    wget http://headsigned.com/download/running-nuget-command-line-on-linux/Microsoft.Build.zip
-    unzip Microsoft.Build.zip
+    cp dll/Microsoft.Build.dll Microsoft.Build.dll
     
-    mkdir -p ../packages
+    mono --runtime=v4.0 nuget.exe install exec/packages.config -OutputDirectory packages
+    mono --runtime=v4.0 nuget.exe install lib/packages.config -OutputDirectory packages
+    mono --runtime=v4.0 nuget.exe install tests/packages.config -OutputDirectory packages
     
-    mono --runtime=v4.0 NuGet.exe install ../exec/packages.config -OutputDirectory ../packages
-    mono --runtime=v4.0 NuGet.exe install ../lib/packages.config -OutputDirectory ../packages
-    mono --runtime=v4.0 NuGet.exe install ../tests/packages.config -OutputDirectory ../packages
-    
-    cd ..
     # Build the solution:
     xbuild gossiperl-client-dotnet.sln
 
