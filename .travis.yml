@@ -16,9 +16,12 @@ install:
   - sudo apt-get install -y mono-complete nunit
   - mozroots --import --sync
   - mkdir -p packages
-  - mono --runtime=v4.0 NuGet.exe install exec/packages.config -OutputDirectory packages
-  - mono --runtime=v4.0 NuGet.exe install lib/packages.config -OutputDirectory packages
-  - mono --runtime=v4.0 NuGet.exe install tests/packages.config -OutputDirectory packages
+  - wget https://nuget.org/nuget.exe
+  - cp dll/Microsoft.Build.dll Microsoft.Build.dll
+  - mono --runtime=v4.0 nuget.exe install exec/packages.config -OutputDirectory packages
+  - mono --runtime=v4.0 nuget.exe install lib/packages.config -OutputDirectory packages
+  - mono --runtime=v4.0 nuget.exe install tests/packages.config -OutputDirectory packages
+  - xbuild gossiperl-client-dotnet.sln
 
 script: nunit-console tests/gossiperl-client-tests.csproj
 
