@@ -7,5 +7,7 @@ lib/obj/**
 tests/bin/**
 tests/obj/**
 packages
-.nuget
+NuGet.exe
+nuget.exe
+Microsoft.Build.dll
 TestResult.xml
