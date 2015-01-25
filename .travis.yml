@@ -21,6 +21,8 @@ install:
   - mono --runtime=v4.0 nuget.exe install exec/packages.config -OutputDirectory packages
   - mono --runtime=v4.0 nuget.exe install lib/packages.config -OutputDirectory packages
   - mono --runtime=v4.0 nuget.exe install tests/packages.config -OutputDirectory packages
+  # this could turn out to be necessary:
+  # - sed -i 's!bin\\Debug!bind/Debug!g' */*.csproj
   - xbuild gossiperl-client-dotnet.sln
 
 script: nunit-console tests/gossiperl-client-tests.csproj
